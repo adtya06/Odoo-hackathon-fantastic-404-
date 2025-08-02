@@ -1,6 +1,12 @@
 from motor.motor_asyncio import AsyncIOMotorClient
+import os
+from dotenv import load_dotenv
 
-MONGO_URL = "mongodb://localhost:27017"  # default local Mongo
+# Load environment variables
+load_dotenv()
+
+# Get MongoDB Atlas connection string from environment variable
+MONGO_URL = os.getenv("MONGODB_URL", "your_atlas_connection_string_here")
 client = AsyncIOMotorClient(MONGO_URL)
 
 db = client["fundb"]  # choose DB name

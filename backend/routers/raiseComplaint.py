@@ -1,17 +1,18 @@
-from fastapi import APIRouter, status,HTTPException
-from .. import schemas
+from fastapi import APIRouter, HTTPException
+from backend import schemas
+from backend.logics import getComplaints, raiseComplaints
+from typing import List
+
 
 router = APIRouter(
-    prefix="/raiseComplaint",
+    prefix="/api",
+    tags=["Raise Complaints"]
 )
 
-# def get_deps(): 
-#     from .. logics import chat
-#     return chat
-
-@router.post('/')
-def upload_doc_router(query : schemas.UserCreate):
-    if not query:
-        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail="Please enter your query")
-    
-        
+@router.post("/complaints", response_model=dict)
+async def create_complaint(complaint: schemas.raiseComplaint):
+    try:
+        result = await raiseComplaints.raiseComplaint(complaint)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

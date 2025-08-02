@@ -1,14 +1,14 @@
-import React from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import React from "react";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 const SimpleMapTest = () => {
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div style={{ height: "300px", width: "100%" }}>
       <MapContainer
-        center={[40.7128, -74.0060]} // New York City
+        center={[40.7128, -74.006]} // New York City
         zoom={13}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: "100%", width: "100%" }}
         className="rounded-lg border border-gray-300"
       >
         <TileLayer

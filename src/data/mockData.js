@@ -11,7 +11,7 @@ export const mockIssues = [
     reportedAt: "2024-01-15T10:30:00Z",
     location: {
       address: "Main St & Oak Ave, Downtown",
-      coordinates: { lat: 40.7128, lng: -74.0060 }
+      coordinates: { lat: 30.77, lng: 76.7401 }
     },
     images: [
       "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
@@ -44,7 +44,7 @@ export const mockIssues = [
     reportedAt: "2024-01-10T18:45:00Z",
     location: {
       address: "Elm Street, Block 200",
-      coordinates: { lat: 40.7148, lng: -74.0070 }
+      coordinates: { lat: 30.7341, lng: 76.7385 }
     },
     images: [
       "https://images.unsplash.com/photo-1574391884720-bbc3d817bbfb?w=400"
@@ -63,7 +63,7 @@ export const mockIssues = [
     reportedAt: "2024-01-12T16:20:00Z",
     location: {
       address: "Central Park, Section A",
-      coordinates: { lat: 40.7589, lng: -73.9851 }
+      coordinates: { lat: 30.7318, lng: 76.7402 }
     },
     images: [
       "https://images.unsplash.com/photo-1586825883318-4b1b0c8f4d89?w=400",
@@ -91,7 +91,7 @@ export const mockIssues = [
     reportedAt: "2024-01-05T11:00:00Z",
     location: {
       address: "Public Library, 123 Library Ave",
-      coordinates: { lat: 40.7400, lng: -73.9900 }
+      coordinates: { lat: 30.7310, lng: 76.7380 }
     },
     images: [
       "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400"
@@ -110,7 +110,7 @@ export const mockIssues = [
     reportedAt: "2024-01-14T13:30:00Z",
     location: {
       address: "Riverside Park Playground",
-      coordinates: { lat: 40.7200, lng: -74.0100 }
+      coordinates: { lat: 30.7330, lng: 76.7410 }
     },
     images: [
       "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400"

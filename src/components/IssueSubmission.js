@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { issueCategories, submitIssue } from '../data/mockData';
+import InteractiveMap from './InteractiveMap';
 
 const IssueSubmission = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const mapRef = useRef(null);
-  const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -23,56 +21,11 @@ const IssueSubmission = () => {
   });
   
   const [loading, setLoading] = useState(false);
-  const [locationLoading, setLocationLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // Initialize map
-  useEffect(() => {
-    // Simple map implementation using HTML5 Geolocation
-    // In a real app, you would use Google Maps, Mapbox, or similar
-    if (navigator.geolocation) {
-      setLocationLoading(true);
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          
-          setFormData(prev => ({
-            ...prev,
-            location: {
-              ...prev.location,
-              coordinates: { lat, lng }
-            }
-          }));
-          
-          // Reverse geocoding simulation (in real app, use actual service)
-          setFormData(prev => ({
-            ...prev,
-            location: {
-              ...prev.location,
-              address: `${lat.toFixed(4)}, ${lng.toFixed(4)}`
-            }
-          }));
-          
-          setLocationLoading(false);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          setLocationLoading(false);
-          // Set default location (example: New York City)
-          setFormData(prev => ({
-            ...prev,
-            location: {
-              address: 'Location not available',
-              coordinates: { lat: 40.7128, lng: -74.0060 }
-            }
-          }));
-        },
-        { timeout: 10000 }
-      );
-    }
-  }, []);
+  // Location is now handled by InteractiveMap component
+  // No need for automatic location detection on component mount
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -110,40 +63,15 @@ const IssueSubmission = () => {
     }));
   };
 
-  const handleLocationUpdate = () => {
-    if (navigator.geolocation) {
-      setLocationLoading(true);
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          
-          setFormData(prev => ({
-            ...prev,
-            location: {
-              address: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-              coordinates: { lat, lng }
-            }
-          }));
-          setLocationLoading(false);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          setLocationLoading(false);
-          setError('Unable to get current location');
-        }
-      );
-    }
-  };
-
-  const handleManualLocationChange = (e) => {
+  const handleLocationSelect = (locationData) => {
     setFormData(prev => ({
       ...prev,
       location: {
-        ...prev.location,
-        address: e.target.value
+        address: locationData.address,
+        coordinates: { lat: locationData.lat, lng: locationData.lng }
       }
     }));
+    setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -316,60 +244,38 @@ const IssueSubmission = () => {
               Location Information
             </h3>
             
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Location Address
-                </label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <input
-                    type="text"
-                    id="location"
-                    className="flex-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-none rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 sm:text-sm"
-                    placeholder="Enter address or use current location"
-                    value={formData.location.address}
-                    onChange={handleManualLocationChange}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleLocationUpdate}
-                    disabled={locationLoading}
-                    className="relative -ml-px inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-r-md text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {locationLoading ? (
-                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                    ) : (
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
+            <InteractiveMap
+              onLocationSelect={handleLocationSelect}
+              initialLat={formData.location.coordinates.lat}
+              initialLng={formData.location.coordinates.lng}
+            />
+            
+            {/* Address Display */}
+            {formData.location.address && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h4 className="text-sm font-medium text-green-800">
+                      Location Selected
+                    </h4>
+                    <p className="text-sm text-green-700 mt-1">
+                      {formData.location.address}
+                    </p>
+                    {formData.location.coordinates.lat && formData.location.coordinates.lng && (
+                      <p className="text-xs text-green-600 mt-1">
+                        Coordinates: {formData.location.coordinates.lat.toFixed(6)}, {formData.location.coordinates.lng.toFixed(6)}
+                      </p>
                     )}
-                    <span>Use Current Location</span>
-                  </button>
+                  </div>
                 </div>
               </div>
-
-              {/* Mock Map Display */}
-              <div className="border border-gray-300 dark:border-gray-600 rounded-lg h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                <div className="text-center">
-                  <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
-                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Interactive Map
-                  </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
-                    {formData.location.coordinates.lat && formData.location.coordinates.lng
-                      ? `Lat: ${formData.location.coordinates.lat?.toFixed(4)}, Lng: ${formData.location.coordinates.lng?.toFixed(4)}`
-                      : 'Click "Use Current Location" to get GPS coordinates'
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 

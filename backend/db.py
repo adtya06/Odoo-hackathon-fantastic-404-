@@ -5,9 +5,20 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Get MongoDB Atlas connection string from environment variable
-MONGO_URL = os.getenv("MONGODB_URL", "your_atlas_connection_string_here")
-client = AsyncIOMotorClient(MONGO_URL)
+# Get MongoDB connection details from environment variables
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+DATABASE_NAME = os.getenv("DATABASE_NAME", "fundb")
 
-db = client["fundb"]  # choose DB name
+client = AsyncIOMotorClient(MONGO_URL)
+db = client[DATABASE_NAME]
+
+# Test connection
+async def test_db_connection():
+    try:
+        await client.admin.command('ping')
+        print("✅ Successfully connected to MongoDB!")
+        return True
+    except Exception as e:
+        print(f"❌ Failed to connect to MongoDB: {e}")
+        return False
 

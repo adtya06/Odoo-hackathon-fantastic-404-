@@ -1,5 +1,5 @@
-from backend import schemas
-from backend import db
+import schemas
+import db
 
 
 async def raiseComplaint(complaint: schemas.raiseComplaint):

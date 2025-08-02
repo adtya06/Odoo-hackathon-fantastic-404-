@@ -94,17 +94,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('civic_user_location');
   };
 
-  const login = async (email, password) => {
-    // Mock authentication - in real app, this would call an API
+  const login = async (username, password) => {
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(true);
       
       // Check if it's admin login
-      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      if (username === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
         const adminData = {
           id: 'admin',
-          email: email,
+          username: 'admin',
+          email: ADMIN_EMAIL,
           name: 'System Administrator',
           avatar: `https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff`,
           isAdmin: true
@@ -117,46 +116,82 @@ export const AuthProvider = ({ children }) => {
         return { success: true, isAdmin: true };
       }
       
-      // Regular user login (for demo, accept any email/password combination)
-      const userData = {
-        id: Date.now(),
-        email: email,
-        name: email.split('@')[0],
-        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=3b82f6&color=fff`,
-        isAdmin: false
-      };
+      // Use API for regular user login
+      const { authAPI } = await import('../services/api');
       
-      setUser(userData);
-      setIsAuthenticated(true);
-      localStorage.setItem('civic_user', JSON.stringify(userData));
+      const response = await authAPI.login({
+        username: username,
+        password: password
+      });
       
-      return { success: true, isAdmin: false };
+      if (response.access_token) {
+        const userData = {
+          id: response.user.id,
+          username: response.user.username,
+          email: response.user.email || '',
+          name: response.user.username,
+          avatar: `https://ui-avatars.com/api/?name=${response.user.username}&background=3b82f6&color=fff`,
+          isAdmin: false
+        };
+        
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('civic_user', JSON.stringify(userData));
+        
+        return { success: true, isAdmin: false };
+      } else {
+        return { success: false, error: 'Invalid credentials' };
+      }
     } catch (error) {
-      return { success: false, error: 'Login failed' };
+      console.error('Login error:', error);
+      return { success: false, error: error.detail || error.message || 'Login failed' };
+    } finally {
+      setLoading(false);
     }
   };
 
-  const signup = async (email, password, name) => {
-    // Mock signup - in real app, this would call an API
+  const signup = async (username, email, password) => {
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(true);
       
-      const userData = {
-        id: Date.now(), // Mock ID
-        email: email,
-        name: name,
-        avatar: `https://ui-avatars.com/api/?name=${name}&background=3b82f6&color=fff`,
-        isAdmin: false
+      // Import API service
+      const { authAPI } = await import('../services/api');
+      
+      // Prepare signup data
+      const signupData = {
+        username: username,
+        password: password
       };
       
-      setUser(userData);
-      setIsAuthenticated(true);
-      localStorage.setItem('civic_user', JSON.stringify(userData));
+      // Add email only if provided
+      if (email && email.trim()) {
+        signupData.email = email;
+      }
       
-      return { success: true };
+      const response = await authAPI.signup(signupData);
+      
+      if (response.success) {
+        const userData = {
+          id: response.user.id,
+          username: response.user.username,
+          email: response.user.email || '',
+          avatar: `https://ui-avatars.com/api/?name=${username}&background=3b82f6&color=fff`,
+          isAdmin: false
+        };
+        
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('civic_user', JSON.stringify(userData));
+        
+        return { success: true };
+      } else {
+        return { success: false, error: response.message || 'Signup failed' };
+      }
     } catch (error) {
-      return { success: false, error: 'Signup failed' };
+      console.error('Signup error:', error);
+      return { success: false, error: error.detail || error.message || 'Signup failed' };
+    } finally {
+      setLoading(false);
     }
   };
 

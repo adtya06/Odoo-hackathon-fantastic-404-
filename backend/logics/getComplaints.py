@@ -1,5 +1,5 @@
-from backend import schemas
-from backend import db
+import schemas
+import db
 from typing import List
 
 async def getcomplaints() -> List[dict]:

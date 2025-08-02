@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from backend import schemas
-from backend.logics import getComplaints, raiseComplaints
+import schemas
+from logics import getComplaints, raiseComplaints
 from typing import List
 
 

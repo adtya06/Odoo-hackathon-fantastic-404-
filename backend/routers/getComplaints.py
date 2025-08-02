@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from backend.logics import getComplaints
+from logics import getComplaints
 
 
 router = APIRouter(

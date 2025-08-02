@@ -3,6 +3,8 @@ fastapi
 uvicorn[standard]
 pydantic
 motor
-pydantic[email]
-python-dotenv   
-logreg_spam_model.joblib
+python-dotenv
+bcrypt
+PyJWT
+python-jose[cryptography]
+python-multipart

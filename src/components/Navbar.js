@@ -47,16 +47,6 @@ const Navbar = () => {
               Dashboard
             </Link>
             <Link
-              to="/map"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/map')
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              Map View
-            </Link>
-            <Link
               to="/submit-issue"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive('/submit-issue')

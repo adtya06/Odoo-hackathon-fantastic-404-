@@ -5,7 +5,6 @@ import { DarkModeProvider } from './context/DarkModeContext';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
-import DashboardWithMap from './components/DashboardWithMap';
 import IssueSubmission from './components/IssueSubmission';
 import IssueDetail from './components/IssueDetail';
 import LocationRequest from './components/LocationRequest';
@@ -85,12 +84,6 @@ function App() {
                 <ProtectedRoute requireLocation={false}>
                   <Navbar />
                   <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/map" element={
-                <ProtectedRoute requireLocation={false}>
-                  <Navbar />
-                  <DashboardWithMap />
                 </ProtectedRoute>
               } />
               <Route path="/submit-issue" element={

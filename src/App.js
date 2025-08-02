@@ -5,56 +5,34 @@ import { DarkModeProvider } from './context/DarkModeContext';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
 import IssueSubmission from './components/IssueSubmission';
 import IssueDetail from './components/IssueDetail';
 import LocationRequest from './components/LocationRequest';
 import Navbar from './components/Navbar';
 
-// Protected Route Component with location check
-const ProtectedRoute = ({ children, requireLocation = false }) => {
-  const { isAuthenticated, userLocation } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-  
-  // If location is required but not available, redirect to location request
-  if (requireLocation && (!userLocation.latitude || !userLocation.longitude)) {
-    return <Navigate to="/location-request" />;
-  }
-  
+// Regular User Route Component (excludes admin users)
+const UserRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (user?.isAdmin) return <Navigate to="/admin" />;
   return children;
 };
 
-// Public Route Component (redirect to dashboard if already authenticated)
-const PublicRoute = ({ children }) => {
-  const { isAuthenticated, userLocation } = useAuth();
-  
-  if (!isAuthenticated) {
-    return children;
-  }
-  
-  // If authenticated but no location, go to location request
-  if (!userLocation.latitude || !userLocation.longitude) {
-    return <Navigate to="/location-request" />;
-  }
-  
-  return <Navigate to="/dashboard" />;
+// Admin Route Component (only for admin users)
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (!user?.isAdmin) return <Navigate to="/dashboard" />;
+  return children;
 };
 
-// Location Route Component (only accessible if authenticated but no location)
-const LocationRoute = ({ children }) => {
-  const { isAuthenticated, userLocation } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+// Public Route Component (redirect to appropriate dashboard if already authenticated)
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuth();
+  if (isAuthenticated) {
+    return user?.isAdmin ? <Navigate to="/admin" /> : <Navigate to="/dashboard" />;
   }
-  
-  // If already have location, go to dashboard
-  if (userLocation.latitude && userLocation.longitude) {
-    return <Navigate to="/dashboard" />;
-  }
-  
   return children;
 };
 
@@ -75,30 +53,40 @@ function App() {
                   <Signup />
                 </PublicRoute>
               } />
-              <Route path="/location-request" element={
-                <LocationRoute>
-                  <LocationRequest />
-                </LocationRoute>
-              } />
               <Route path="/dashboard" element={
-                <ProtectedRoute requireLocation={false}>
+                <UserRoute>
                   <Navbar />
                   <Dashboard />
-                </ProtectedRoute>
+                </UserRoute>
               } />
               <Route path="/submit-issue" element={
-                <ProtectedRoute requireLocation={true}>
+                <UserRoute>
                   <Navbar />
                   <IssueSubmission />
-                </ProtectedRoute>
+                </UserRoute>
               } />
               <Route path="/issue/:id" element={
-                <ProtectedRoute requireLocation={false}>
+                <UserRoute>
                   <Navbar />
                   <IssueDetail />
-                </ProtectedRoute>
+                </UserRoute>
               } />
-              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/location-request" element={
+                <UserRoute>
+                  <LocationRequest />
+                </UserRoute>
+              } />
+              <Route path="/admin" element={
+                <AdminRoute>
+                  <Navbar />
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
+              <Route path="/" element={
+                <PublicRoute>
+                  <Navigate to="/login" />
+                </PublicRoute>
+              } />
             </Routes>
           </div>
         </Router>

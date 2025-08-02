@@ -11,7 +11,7 @@ export const mockIssues = [
     reportedAt: "2024-01-15T10:30:00Z",
     location: {
       address: "Main St & Oak Ave, Downtown",
-      coordinates: { lat: 30.77, lng: 76.7401 }
+      coordinates: { lat: 30.96, lng: 76.467 }
     },
     images: [
       "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
@@ -207,4 +207,42 @@ export const getIssueById = async (id) => {
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 300));
   return mockIssues.find(issue => issue.id === parseInt(id));
+};
+
+export const updateIssueStatus = async (id, newStatus, adminComment = '') => {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  const issueIndex = mockIssues.findIndex(issue => issue.id === parseInt(id));
+  if (issueIndex === -1) {
+    throw new Error('Issue not found');
+  }
+  
+  mockIssues[issueIndex].status = newStatus;
+  mockIssues[issueIndex].lastUpdated = new Date().toISOString();
+  
+  // Add admin comment if provided
+  if (adminComment) {
+    const newComment = {
+      id: Date.now(),
+      author: 'System Admin',
+      text: adminComment,
+      timestamp: new Date().toISOString(),
+      isAdminComment: true
+    };
+    mockIssues[issueIndex].comments.push(newComment);
+  }
+  
+  return { success: true, issue: mockIssues[issueIndex] };
+};
+
+export const getIssuesForAdmin = async () => {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 400));
+  // Return all issues with additional admin info
+  return mockIssues.map(issue => ({
+    ...issue,
+    needsAttention: issue.status === 'Open' && issue.upvotes > 10,
+    daysSinceReported: Math.floor((new Date() - new Date(issue.reportedAt)) / (1000 * 60 * 60 * 24))
+  }));
 };

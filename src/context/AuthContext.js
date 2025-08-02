@@ -38,6 +38,10 @@ export const AuthProvider = ({ children }) => {
   const [locationError, setLocationError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Hardcoded admin credentials
+  const ADMIN_EMAIL = 'admin@civic.gov';
+  const ADMIN_PASSWORD = 'admin123';
+
   useEffect(() => {
     // Check if user is already logged in (localStorage)
     const savedUser = localStorage.getItem('civic_user');
@@ -96,19 +100,37 @@ export const AuthProvider = ({ children }) => {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock user data
+      // Check if it's admin login
+      if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        const adminData = {
+          id: 'admin',
+          email: email,
+          name: 'System Administrator',
+          avatar: `https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff`,
+          isAdmin: true
+        };
+        
+        setUser(adminData);
+        setIsAuthenticated(true);
+        localStorage.setItem('civic_user', JSON.stringify(adminData));
+        
+        return { success: true, isAdmin: true };
+      }
+      
+      // Regular user login (for demo, accept any email/password combination)
       const userData = {
-        id: 1,
+        id: Date.now(),
         email: email,
         name: email.split('@')[0],
-        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=3b82f6&color=fff`
+        avatar: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=3b82f6&color=fff`,
+        isAdmin: false
       };
       
       setUser(userData);
       setIsAuthenticated(true);
       localStorage.setItem('civic_user', JSON.stringify(userData));
       
-      return { success: true };
+      return { success: true, isAdmin: false };
     } catch (error) {
       return { success: false, error: 'Login failed' };
     }
@@ -124,7 +146,8 @@ export const AuthProvider = ({ children }) => {
         id: Date.now(), // Mock ID
         email: email,
         name: name,
-        avatar: `https://ui-avatars.com/api/?name=${name}&background=3b82f6&color=fff`
+        avatar: `https://ui-avatars.com/api/?name=${name}&background=3b82f6&color=fff`,
+        isAdmin: false
       };
       
       setUser(userData);
@@ -157,7 +180,8 @@ export const AuthProvider = ({ children }) => {
     updateUserLocation,
     clearUserLocation,
     setLocationLoading,
-    setLocationError
+    setLocationError,
+    isAdmin: user?.isAdmin || false
   };
 
   return (

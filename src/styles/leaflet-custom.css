@@ -1,0 +1,119 @@
+/* Custom styles for Leaflet map components */
+
+/* Ensure Leaflet map container has proper dimensions */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Fix for marker icons */
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+/* Custom marker styles */
+.user-location-marker {
+  z-index: 1000;
+}
+
+.issue-marker {
+  z-index: 900;
+}
+
+.selected-location-marker {
+  z-index: 1100;
+}
+
+/* Info panel styles */
+.leaflet-control-custom {
+  background: white;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+
+/* Popup styles */
+.leaflet-popup-content {
+  min-width: 200px;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+/* Loading spinner for map */
+.map-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #f9fafb;
+}
+
+/* Map error state */
+.map-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #fef2f2;
+  color: #dc2626;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Responsive map controls */
+@media (max-width: 640px) {
+  .leaflet-control-zoom {
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+  }
+  
+  .leaflet-control-attribution {
+    font-size: 10px !important;
+  }
+}
+
+/* Custom circle styles */
+.leaflet-interactive {
+  cursor: pointer;
+}
+
+/* Ensure proper z-index for modals over map */
+.leaflet-container {
+  z-index: 1;
+}
+
+.modal-overlay {
+  z-index: 9999;
+}
+
+/* Custom tooltip styles */
+.leaflet-tooltip {
+  background-color: #374151;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-tooltip-top:before {
+  border-top-color: #374151;
+}
+
+.leaflet-tooltip-bottom:before {
+  border-bottom-color: #374151;
+}
+
+.leaflet-tooltip-left:before {
+  border-left-color: #374151;
+}
+
+.leaflet-tooltip-right:before {
+  border-right-color: #374151;
+}

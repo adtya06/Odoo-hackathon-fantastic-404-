@@ -30,7 +30,12 @@ const Login = () => {
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        navigate('/dashboard');
+        // Redirect admin to admin panel, regular users to dashboard
+        if (result.isAdmin) {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         setError(result.error || 'Login failed');
       }
@@ -150,11 +155,20 @@ const Login = () => {
             </span>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/50 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-300 font-medium mb-2">Demo Credentials:</p>
-            <p className="text-xs text-blue-600 dark:text-blue-400">
-              Use any email and password to login. This is a demo app with mock authentication.
-            </p>
+          <div className="mt-6 space-y-3">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/50 rounded-lg">
+              <p className="text-sm text-blue-800 dark:text-blue-300 font-medium mb-2">Demo Credentials:</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">
+                Use any email and password to login as a regular user.
+              </p>
+            </div>
+            <div className="p-4 bg-red-50 dark:bg-red-900/50 rounded-lg">
+              <p className="text-sm text-red-800 dark:text-red-300 font-medium mb-2">Admin Access:</p>
+              <p className="text-xs text-red-600 dark:text-red-400 font-mono">
+                Email: admin@civic.gov<br />
+                Password: admin123
+              </p>
+            </div>
           </div>
         </form>
       </div>

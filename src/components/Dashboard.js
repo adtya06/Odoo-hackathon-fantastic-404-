@@ -58,10 +58,10 @@ const Dashboard = () => {
       {/* Header */}
       <div className="md:flex md:items-center md:justify-between mb-8">
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+          <h2 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
             Civic Issues Dashboard
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Track and manage civic issues reported in your community
           </p>
         </div>
@@ -80,7 +80,7 @@ const Dashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -92,15 +92,15 @@ const Dashboard = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Total Issues</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.total}</dd>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Issues</dt>
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">{stats.total}</dd>
                 </dl>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -112,15 +112,15 @@ const Dashboard = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Open Issues</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.open}</dd>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Open Issues</dt>
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">{stats.open}</dd>
                 </dl>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -132,15 +132,15 @@ const Dashboard = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">In Progress</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.inProgress}</dd>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">In Progress</dt>
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">{stats.inProgress}</dd>
                 </dl>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -152,8 +152,8 @@ const Dashboard = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Resolved</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.resolved}</dd>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Resolved</dt>
+                  <dd className="text-lg font-medium text-gray-900 dark:text-white">{stats.resolved}</dd>
                 </dl>
               </div>
             </div>
@@ -162,7 +162,7 @@ const Dashboard = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white shadow rounded-lg mb-6">
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg mb-6">
         <div className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div className="flex space-x-4 mb-4 sm:mb-0">
@@ -172,8 +172,8 @@ const Dashboard = () => {
                   onClick={() => setFilter(status)}
                   className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                     filter === status
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
                   {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -184,12 +184,12 @@ const Dashboard = () => {
               <input
                 type="text"
                 placeholder="Search issues..."
-                className="w-full sm:w-64 pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="w-full sm:w-64 pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -198,73 +198,104 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Issues List */}
-      <div className="bg-white shadow overflow-hidden sm:rounded-md">
+      {/* Issues Cards */}
+      <div>
         {filteredIssues.length === 0 ? (
-          <div className="text-center py-12">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No issues found</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              {searchTerm || filter !== 'all' 
-                ? 'Try adjusting your search or filter criteria.' 
-                : 'Get started by reporting a new civic issue.'
-              }
-            </p>
+          <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+            <div className="text-center py-12">
+              <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No issues found</h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                {searchTerm || filter !== 'all' 
+                  ? 'Try adjusting your search or filter criteria.' 
+                  : 'Get started by reporting a new civic issue.'
+                }
+              </p>
+            </div>
           </div>
         ) : (
-          <ul className="divide-y divide-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredIssues.map((issue) => (
-              <li key={issue.id}>
-                <Link
-                  to={`/issue/${issue.id}`}
-                  className="block hover:bg-gray-50 transition-colors duration-150"
-                >
-                  <div className="px-4 py-4 sm:px-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-3">
-                          <p className="text-sm font-medium text-blue-600 truncate">
-                            {issue.title}
-                          </p>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(issue.status)}`}>
-                            {issue.status}
-                          </span>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(issue.priority)}`}>
-                            {issue.priority}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                          {issue.description}
-                        </p>
-                        <div className="mt-2 flex items-center text-sm text-gray-500 space-x-4">
-                          <span>{issue.category}</span>
-                          <span>•</span>
-                          <span>{issue.location.address}</span>
-                          <span>•</span>
-                          <span>Reported by {issue.reportedBy}</span>
-                          <span>•</span>
-                          <span>{formatDate(issue.reportedAt)}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                          </svg>
-                          {issue.upvotes}
-                        </div>
-                        <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <div key={issue.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+                <Link to={`/issue/${issue.id}`} className="block">
+                  {/* Image Section */}
+                  <div className="relative h-48 bg-gray-200 dark:bg-gray-700 rounded-t-lg overflow-hidden">
+                    {issue.images && issue.images.length > 0 ? (
+                      <img
+                        src={issue.images[0]}
+                        alt={issue.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <svg className="w-12 h-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
+                      </div>
+                    )}
+                    {/* Status and Priority Badges */}
+                    <div className="absolute top-2 left-2 flex space-x-2">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(issue.status)}`}>
+                        {issue.status}
+                      </span>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(issue.priority)}`}>
+                        {issue.priority}
+                      </span>
+                    </div>
+                    {/* Upvotes Badge */}
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full px-2 py-1 flex items-center space-x-1">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      <span className="text-xs text-white font-medium">{issue.upvotes}</span>
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                      {issue.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-3">
+                      {issue.description}
+                    </p>
+                    
+                    {/* Category */}
+                    <div className="flex items-center mb-3">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                        {issue.category}
+                      </span>
+                    </div>
+
+                    {/* Location and Date */}
+                    <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span className="truncate">{issue.location.address}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span>By {issue.reportedBy}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{formatDate(issue.reportedAt)}</span>
                       </div>
                     </div>
                   </div>
                 </Link>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>

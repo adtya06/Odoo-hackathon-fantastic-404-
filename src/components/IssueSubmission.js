@@ -218,26 +218,26 @@ const IssueSubmission = () => {
     <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <div className="md:flex md:items-center md:justify-between mb-8">
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+          <h2 className="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
             Report a Civic Issue
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Help improve your community by reporting civic issues that need attention
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="bg-white shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">
               Issue Details
             </h3>
             
             <div className="grid grid-cols-1 gap-6">
               {/* Title */}
               <div>
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Issue Title *
                 </label>
                 <input
@@ -245,7 +245,7 @@ const IssueSubmission = () => {
                   id="title"
                   name="title"
                   required
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 sm:text-sm"
                   placeholder="Brief description of the issue"
                   value={formData.title}
                   onChange={handleInputChange}
@@ -254,7 +254,7 @@ const IssueSubmission = () => {
 
               {/* Description */}
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Detailed Description *
                 </label>
                 <textarea
@@ -262,7 +262,7 @@ const IssueSubmission = () => {
                   name="description"
                   rows={4}
                   required
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 sm:text-sm"
                   placeholder="Provide detailed information about the issue..."
                   value={formData.description}
                   onChange={handleInputChange}
@@ -271,14 +271,14 @@ const IssueSubmission = () => {
 
               {/* Category */}
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Category *
                 </label>
                 <select
                   id="category"
                   name="category"
                   required
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 sm:text-sm"
                   value={formData.category}
                   onChange={handleInputChange}
                 >
@@ -301,7 +301,7 @@ const IssueSubmission = () => {
                   checked={formData.isAnonymous}
                   onChange={handleInputChange}
                 />
-                <label htmlFor="isAnonymous" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="isAnonymous" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                   Submit anonymously
                 </label>
               </div>
@@ -310,22 +310,22 @@ const IssueSubmission = () => {
         </div>
 
         {/* Location Section */}
-        <div className="bg-white shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">
               Location Information
             </h3>
             
             <div className="space-y-4">
               <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Location Address
                 </label>
                 <div className="mt-1 flex rounded-md shadow-sm">
                   <input
                     type="text"
                     id="location"
-                    className="flex-1 block w-full border-gray-300 rounded-none rounded-l-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="flex-1 block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-none rounded-l-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 sm:text-sm"
                     placeholder="Enter address or use current location"
                     value={formData.location.address}
                     onChange={handleManualLocationChange}
@@ -334,7 +334,7 @@ const IssueSubmission = () => {
                     type="button"
                     onClick={handleLocationUpdate}
                     disabled={locationLoading}
-                    className="relative -ml-px inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
+                    className="relative -ml-px inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-r-md text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {locationLoading ? (
                       <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -353,15 +353,15 @@ const IssueSubmission = () => {
               </div>
 
               {/* Mock Map Display */}
-              <div className="border border-gray-300 rounded-lg h-64 bg-gray-100 flex items-center justify-center">
+              <div className="border border-gray-300 dark:border-gray-600 rounded-lg h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                 <div className="text-center">
-                  <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Interactive Map
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
                     {formData.location.coordinates.lat && formData.location.coordinates.lng
                       ? `Lat: ${formData.location.coordinates.lat?.toFixed(4)}, Lng: ${formData.location.coordinates.lng?.toFixed(4)}`
                       : 'Click "Use Current Location" to get GPS coordinates'
@@ -374,12 +374,12 @@ const IssueSubmission = () => {
         </div>
 
         {/* Image Upload Section */}
-        <div className="bg-white shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">
               Upload Photos (Optional)
             </h3>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               Upload up to 3 photos to help illustrate the issue. Supported formats: JPG, PNG, WebP
             </p>
             
@@ -387,13 +387,13 @@ const IssueSubmission = () => {
               {/* Upload Button */}
               <div>
                 <label htmlFor="images" className="cursor-pointer">
-                  <div className="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-gray-400 transition-colors">
+                  <div className="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
                     <div className="space-y-1 text-center">
-                      <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <div className="flex text-sm text-gray-600">
-                        <span className="relative bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                      <div className="flex text-sm text-gray-600 dark:text-gray-300">
+                        <span className="relative bg-white dark:bg-gray-700 rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                           Upload photos
                         </span>
                         <p className="pl-1">or drag and drop</p>
@@ -447,7 +447,7 @@ const IssueSubmission = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+          <div className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-md text-sm">
             {error}
           </div>
         )}
@@ -457,7 +457,7 @@ const IssueSubmission = () => {
           <button
             type="button"
             onClick={() => navigate('/dashboard')}
-            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Cancel
           </button>

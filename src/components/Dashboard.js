@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getIssues, formatDate } from '../data/mockData';
+import { getIssues, formatDate, issueCategories, statusOptions } from '../data/mockData';
 import { filterIssuesByRadius, formatDistance } from '../utils/locationUtils';
 import LocationComponent from './LocationComponent';
 
@@ -11,9 +11,11 @@ const Dashboard = () => {
   const [filteredIssues, setFilteredIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [radiusFilter, setRadiusFilter] = useState(5);
   const [showLocationSettings, setShowLocationSettings] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -54,12 +56,17 @@ const Dashboard = () => {
     }
 
     // Apply status filter
-    if (filter !== 'all') {
-      filtered = filtered.filter(issue => issue.status.toLowerCase() === filter);
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(issue => issue.status.toLowerCase() === statusFilter);
+    }
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(issue => issue.category === categoryFilter);
     }
 
     setFilteredIssues(filtered);
-  }, [issues, searchTerm, filter, userLocation, radiusFilter]);
+  }, [issues, searchTerm, statusFilter, categoryFilter, userLocation, radiusFilter]);
 
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
@@ -328,7 +335,8 @@ const Dashboard = () => {
       {/* Search and Filter Controls */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg mb-8">
         <div className="px-4 py-5 sm:p-6">
-          <div className="sm:flex sm:items-center sm:justify-between">
+          {/* Search Bar */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
             <div className="flex-1 max-w-lg">
               <label htmlFor="search" className="sr-only">Search issues</label>
               <div className="relative">
@@ -341,33 +349,165 @@ const Dashboard = () => {
                   id="search"
                   type="search"
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md leading-5 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Search issues..."
+                  placeholder="Search by title, description, category, or location..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
-            <div className="mt-3 sm:mt-0 sm:ml-4">
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="block w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm font-medium appearance-none cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                  backgroundPosition: 'right 0.5rem center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: '1.5em 1.5em',
-                  paddingRight: '2.5rem'
-                }}
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`inline-flex items-center px-3 py-2 border rounded-md text-sm font-medium transition-colors ${
+                  showFilters
+                    ? 'border-blue-500 text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400'
+                    : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'
+                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
-                <option value="all">All Status</option>
-                <option value="open">Open</option>
-                <option value="in progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-                <option value="closed">Closed</option>
-              </select>
+                <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                </svg>
+                Filters
+                {(statusFilter !== 'all' || categoryFilter !== 'all') && (
+                  <span className="ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200">
+                    {[statusFilter !== 'all' ? 1 : 0, categoryFilter !== 'all' ? 1 : 0].reduce((a, b) => a + b, 0)}
+                  </span>
+                )}
+              </button>
+              {(searchTerm || statusFilter !== 'all' || categoryFilter !== 'all') && (
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setStatusFilter('all');
+                    setCategoryFilter('all');
+                  }}
+                  className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Clear All
+                </button>
+              )}
             </div>
           </div>
+
+          {/* Filter Panel */}
+          {showFilters && (
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Status Filter */}
+                <div>
+                  <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Status
+                  </label>
+                  <select
+                    id="status-filter"
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  >
+                    <option value="all">All Status</option>
+                    {statusOptions.map(status => (
+                      <option key={status} value={status.toLowerCase()}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Category Filter */}
+                <div>
+                  <label htmlFor="category-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Category
+                  </label>
+                  <select
+                    id="category-filter"
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  >
+                    <option value="all">All Categories</option>
+                    {issueCategories.map(category => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Distance Filter */}
+                {userLocation.latitude && userLocation.longitude && (
+                  <div>
+                    <label htmlFor="distance-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Distance
+                    </label>
+                    <select
+                      id="distance-filter"
+                      value={radiusFilter}
+                      onChange={(e) => setRadiusFilter(Number(e.target.value))}
+                      className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                      <option value={1}>Within 1 km</option>
+                      <option value={2}>Within 2 km</option>
+                      <option value={5}>Within 5 km</option>
+                      <option value={10}>Within 10 km</option>
+                      <option value={25}>Within 25 km</option>
+                      <option value={50}>Within 50 km</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              {/* Active Filters Display */}
+              {(statusFilter !== 'all' || categoryFilter !== 'all' || searchTerm) && (
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Active filters:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {searchTerm && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200">
+                        Search: "{searchTerm}"
+                        <button
+                          onClick={() => setSearchTerm('')}
+                          className="ml-1.5 h-3 w-3 rounded-full inline-flex items-center justify-center text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white"
+                        >
+                          <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                            <path strokeLinecap="round" strokeWidth="1.5" d="m1 1 6 6m0-6-6 6" />
+                          </svg>
+                        </button>
+                      </span>
+                    )}
+                    {statusFilter !== 'all' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200">
+                        Status: {statusOptions.find(s => s.toLowerCase() === statusFilter)}
+                        <button
+                          onClick={() => setStatusFilter('all')}
+                          className="ml-1.5 h-3 w-3 rounded-full inline-flex items-center justify-center text-green-400 hover:bg-green-200 hover:text-green-500 focus:outline-none focus:bg-green-500 focus:text-white"
+                        >
+                          <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                            <path strokeLinecap="round" strokeWidth="1.5" d="m1 1 6 6m0-6-6 6" />
+                          </svg>
+                        </button>
+                      </span>
+                    )}
+                    {categoryFilter !== 'all' && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200">
+                        Category: {categoryFilter}
+                        <button
+                          onClick={() => setCategoryFilter('all')}
+                          className="ml-1.5 h-3 w-3 rounded-full inline-flex items-center justify-center text-purple-400 hover:bg-purple-200 hover:text-purple-500 focus:outline-none focus:bg-purple-500 focus:text-white"
+                        >
+                          <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                            <path strokeLinecap="round" strokeWidth="1.5" d="m1 1 6 6m0-6-6 6" />
+                          </svg>
+                        </button>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -381,7 +521,7 @@ const Dashboard = () => {
               </svg>
               <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No issues found</h3>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                {searchTerm || filter !== 'all' 
+                {searchTerm || statusFilter !== 'all' || categoryFilter !== 'all'
                   ? 'Try adjusting your search or filter criteria.' 
                   : 'Get started by reporting a new civic issue.'
                 }

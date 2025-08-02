@@ -18,6 +18,7 @@ export const mockIssues = [
       "https://images.unsplash.com/photo-1591214851171-4a34c2da1b19?w=400"
     ],
     upvotes: 15,
+    reopenVotes: 0,
     comments: [
       {
         id: 1,
@@ -50,6 +51,7 @@ export const mockIssues = [
       "https://images.unsplash.com/photo-1574391884720-bbc3d817bbfb?w=400"
     ],
     upvotes: 8,
+    reopenVotes: 0,
     comments: []
   },
   {
@@ -71,6 +73,7 @@ export const mockIssues = [
       "https://images.unsplash.com/photo-1605600659908-0ef719419d41?w=400"
     ],
     upvotes: 12,
+    reopenVotes: 0,
     comments: [
       {
         id: 1,
@@ -97,6 +100,7 @@ export const mockIssues = [
       "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400"
     ],
     upvotes: 5,
+    reopenVotes: 2,
     comments: []
   },
   {
@@ -116,6 +120,7 @@ export const mockIssues = [
       "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400"
     ],
     upvotes: 22,
+    reopenVotes: 0,
     comments: [
       {
         id: 1,

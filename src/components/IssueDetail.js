@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { issues } from '../data/mockData';
+import { getIssues } from '../data/mockData';
 
 const IssueDetail = () => {
   const { id } = useParams();
@@ -13,10 +13,16 @@ const IssueDetail = () => {
   const [newComment, setNewComment] = useState('');
 
   useEffect(() => {
-    const fetchIssue = () => {
-      const foundIssue = issues.find(issue => issue.id === parseInt(id));
-      setIssue(foundIssue);
-      setLoading(false);
+    const fetchIssue = async () => {
+      try {
+        const allIssues = await getIssues();
+        const foundIssue = allIssues.find(issue => issue.id === parseInt(id));
+        setIssue(foundIssue);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching issue:', error);
+        setLoading(false);
+      }
     };
 
     fetchIssue();

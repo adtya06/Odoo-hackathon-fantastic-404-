@@ -39,6 +39,8 @@ const DirectLeafletMap = ({
   selectedLocation,
   height = "300px",
   showCurrentLocation = false,
+  isStatic = false,
+  initialZoom = 13,
 }) => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -49,7 +51,15 @@ const DirectLeafletMap = ({
     if (!mapRef.current || mapInstanceRef.current) return;
 
     // Initialize map
-    const map = L.map(mapRef.current).setView([40.7128, -74.006], 13);
+    const map = L.map(mapRef.current, {
+      zoomControl: !isStatic,
+      dragging: !isStatic,
+      touchZoom: !isStatic,
+      scrollWheelZoom: !isStatic,
+      doubleClickZoom: !isStatic,
+      boxZoom: !isStatic,
+      keyboard: !isStatic,
+    }).setView([40.7128, -74.006], initialZoom);
 
     // Add tile layer
     L.tileLayer(
@@ -62,27 +72,29 @@ const DirectLeafletMap = ({
       }
     ).addTo(map);
 
-    // Add click handler
-    map.on("click", (e) => {
-      if (onLocationSelect) {
-        const { lat, lng } = e.latlng;
+    // Add click handler only if not static
+    if (!isStatic) {
+      map.on("click", (e) => {
+        if (onLocationSelect) {
+          const { lat, lng } = e.latlng;
 
-        // Remove existing marker
-        if (markerRef.current) {
-          map.removeLayer(markerRef.current);
+          // Remove existing marker
+          if (markerRef.current) {
+            map.removeLayer(markerRef.current);
+          }
+
+          // Add new marker
+          markerRef.current = L.marker([lat, lng]).addTo(map);
+
+          // Call callback with location data
+          onLocationSelect({
+            lat,
+            lng,
+            address: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
+          });
         }
-
-        // Add new marker
-        markerRef.current = L.marker([lat, lng]).addTo(map);
-
-        // Call callback with location data
-        onLocationSelect({
-          lat,
-          lng,
-          address: `${lat.toFixed(4)}, ${lng.toFixed(4)}`,
-        });
-      }
-    });
+      });
+    }
 
     mapInstanceRef.current = map;
     setMapReady(true);
@@ -104,8 +116,22 @@ const DirectLeafletMap = ({
         mapInstanceRef.current.removeLayer(markerRef.current);
       }
 
-      // Choose icon based on whether it's current location or selected location
-      const icon = showCurrentLocation ? CurrentLocationIcon : DefaultIcon;
+      // Create red marker icon for static map, or choose based on showCurrentLocation for interactive map
+      let icon;
+      if (isStatic) {
+        // Red marker for static map
+        icon = L.icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });
+      } else {
+        // Choose icon based on whether it's current location or selected location
+        icon = showCurrentLocation ? CurrentLocationIcon : DefaultIcon;
+      }
 
       // Add new marker
       markerRef.current = L.marker(
@@ -113,18 +139,18 @@ const DirectLeafletMap = ({
         { icon }
       ).addTo(mapInstanceRef.current);
 
-      // Add popup for current location
-      if (showCurrentLocation) {
+      // Add popup for current location (only for interactive maps)
+      if (showCurrentLocation && !isStatic) {
         markerRef.current.bindPopup("📍 Your current location").openPopup();
       }
 
       // Center map on location
       mapInstanceRef.current.setView(
         [selectedLocation.lat, selectedLocation.lng],
-        13
+        initialZoom
       );
     }
-  }, [selectedLocation, mapReady, showCurrentLocation]);
+  }, [selectedLocation, mapReady, showCurrentLocation, isStatic, initialZoom]);
 
   return (
     <div

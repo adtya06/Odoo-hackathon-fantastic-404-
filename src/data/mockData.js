@@ -10,8 +10,8 @@ export const mockIssues = [
     reportedBy: "Anonymous",
     reportedAt: "2024-01-15T10:30:00Z",
     location: {
-      address: "Main St & Oak Ave, Downtown",
-      coordinates: { lat: 30.77, lng: 76.7401 }
+      address: "IIT Ropar, Punjab",
+      coordinates: { lat: 30.968, lng: 76.467 }
     },
     images: [
       "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",

@@ -5,3 +5,4 @@ pydantic
 motor
 pydantic[email]
 python-dotenv   
+logreg_spam_model.joblib
